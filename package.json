@@ -1,19 +1,28 @@
 {
-  "name": "fileverse-api",
-  "version": "1.0.0",
-  "description": "",
-  "main": "index.js",
+  "name": "node-mysql-jwt",
+  "version": "2.0.0",
+  "private": true,
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon ./bin/www"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Harshit199dubey/fileVerse-api.git"
+  "dependencies": {
+    "bcrypt": "^5.0.1",
+    "cookie-parser": "~1.4.4",
+    "debug": "~2.6.9",
+    "dotenv": "^16.0.0",
+    "express": "~4.16.1",
+    "joi": "^17.6.0",
+    "jsonwebtoken": "^8.5.1",
+    "keyv": "^4.1.1",
+    "morgan": "~1.9.1",
+    "mysql2": "^2.3.3",
+    "nodemon": "^3.1.0",
+    "sequelize": "^6.17.0",
+    "speakeasy": "^2.0.0"
   },
-  "author": "Harshit Dubey",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/Harshit199dubey/fileVerse-api/issues"
-  },
-  "homepage": "https://github.com/Harshit199dubey/fileVerse-api#readme"
+  "devDependencies": {
+    "swagger-autogen": "^2.23.0",
+    "swagger-jsdoc": "^6.0.8",
+    "swagger-ui-express": "^4.1.6"
+  }
 }
