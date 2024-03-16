@@ -6,8 +6,17 @@ module.exports = (schema) => async (req, res, next) => {
           wrap: { label: "" },
         },
         abortEarly: true,
+
+
+
+
+
       };
-      const body = req.method === "GET" ? req.query : req.body;
+      const body = req.method === "GET" ? req.query
+      
+      
+      
+      : req.body;
       await schema.validateAsync(body, options);
     } catch (error) {
       return res.status(400).json({ message: error.message });
