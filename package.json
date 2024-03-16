@@ -3,7 +3,8 @@
   "version": "2.0.0",
   "private": true,
   "scripts": {
-    "start": "nodemon ./bin/www"
+    "start": "nodemon ./bin/www",
+    "prepare": "husky"
   },
   "dependencies": {
     "bcrypt": "^5.0.1",
@@ -21,6 +22,11 @@
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
+    "eslint": "^8.57.0",
+    "eslint-config-google": "^0.14.0",
+    "husky": "^9.0.11",
+    "lint-staged": "^15.2.2",
+    "prettier": "3.2.5",
     "swagger-autogen": "^2.23.0",
     "swagger-jsdoc": "^6.0.8",
     "swagger-ui-express": "^4.1.6"
