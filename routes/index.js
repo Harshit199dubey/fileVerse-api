@@ -20,6 +20,11 @@ router.post(
   ErrorHandler(AuthController.sendEmailVerificationOtp),
 );
 router.post(
+  "/um/verifyEmailOtp",
+  validate(schema.verifyEmailOtp),
+  ErrorHandler(AuthController.verifyEmailOtp),
+);
+router.post(
   "/um/login",
   validate(schema.login),
   ErrorHandler(AuthController.login),

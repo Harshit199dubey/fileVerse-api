@@ -10,6 +10,9 @@ const Verificationtable = sequelize.define(
     otpToken: {
       type: DataTypes.STRING,
     },
+    isVerified: {
+      type: DataTypes.BOOLEAN,
+    },
   },
   {
     createdAt: "created_at",

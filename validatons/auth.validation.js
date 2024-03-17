@@ -19,7 +19,7 @@ const validateMobileNumber = (value) => {
 module.exports = {
   register: Joi.object().keys({
     name: Joi.string().required(),
-    email: Joi.string().email().required(),
+    otpId: Joi.string().required(),
     password: Joi.string().min(8).max(16).required().external(validatePassword),
     organization: Joi.string(),
     gender: Joi.number().required(),
@@ -41,5 +41,10 @@ module.exports = {
   }),
   sendEmailVerificationOtp: Joi.object().keys({
     email: Joi.string().email().required(),
+  }),
+  verifyEmailOtp: Joi.object().keys({
+    email: Joi.string().email().required(),
+    otpId: Joi.string().required(),
+    code: Joi.string().required(),
   }),
 };

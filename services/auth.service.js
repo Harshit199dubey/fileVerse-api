@@ -5,6 +5,17 @@ const Token = require("../models/token.model");
 const UserModel = require("../models/user.model");
 const cacheUtil = require("../utils/cache.util");
 const jwtUtil = require("../utils/jwt.util");
+const nodemailer = require("nodemailer");
+
+const transporter = nodemailer.createTransport({
+  service: "gmail",
+  host: "smtp.gmail.com",
+  secure: true,
+  auth: {
+    user: process.env.EMAIL_ID,
+    pass: process.env.EMAIL_PASSWORD,
+  },
+});
 
 exports.createUser = (user) => UserModel.create(user);
 
@@ -80,22 +91,76 @@ exports.refreshToken = async (refreshToken) => {
 };
 exports.sendEmailVerificationOtp = async (email) => {
   // of 20 characters
-  const secret = speakeasy.generateSecret({ length: 20 });
+  const secret = speakeasy.generateSecret({ length: 20 }).base32;
 
   // Generate a TOTP code using the secret key
   const code = speakeasy.totp({
     // Use the Base32 encoding of the secret key
-    secret: secret.base32,
+    secret: secret,
 
     // Tell Speakeasy to use the Base32
     // encoding format for the secret key
     encoding: "base32",
+    window: 10,
   });
-  // TODO: send email login
+  const mailOptions = {
+    from: process.env.EMAIL_ID,
+    to: email,
+    subject: "Email Verificaion Code",
+    text: "Code: " + code + "\n This code is vaild for one minute only.",
+  };
+  return new Promise((res, rej) => {
+    transporter.sendMail(mailOptions, function (error, info) {
+      if (error) {
+        rej(error);
+      } else {
+        Verificationtable.create({
+          email,
+          otpToken: secret,
+          isVerified: false,
+        }).then((data) => {
+          setTimeout(async () => {
+            const da = await Verificationtable.findOne({
+              where: {
+                id: data.id,
+              },
+            });
+            if (!da.isVerified)
+              Verificationtable.destroy({
+                where: {
+                  id: da.id,
+                },
+              });
+          }, process.env.CODE_VERIFICATION_TIME * 1000);
+          res({ id: data.id });
+        });
+      }
+    });
+  });
+};
 
-  await Verificationtable.create({
-    email,
-    otpToken: secret.base32,
+exports.verifyEmailOtp = async (id, email, otp) => {
+  const data = await Verificationtable.findOne({
+    where: {
+      id: id,
+      email: email,
+    },
   });
-  return "otp sent";
+  if (!data) {
+    throw Error("Invalid OTP");
+  }
+
+  const verified = speakeasy.totp.verify({
+    secret: data.otpToken,
+    encoding: "base32",
+    window: 10,
+    token: otp,
+  });
+  if (verified) {
+    data.isVerified = true;
+    await data.save();
+    return "Email Verified";
+  }
+
+  throw Error("Invalid OTP");
 };

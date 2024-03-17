@@ -20,7 +20,7 @@ const bcryptUtil = require("../utils/bcrypt.util");
  *             type: object
  *             required:
  *               - name
- *               - email
+ *               - otpId
  *               - password
  *               - organization
  *               - gender
@@ -31,7 +31,7 @@ const bcryptUtil = require("../utils/bcrypt.util");
  *             properties:
  *               name:
  *                 type: string
- *               email:
+ *               otpId:
  *                 type: string
  *               organization:
  *                 type: string
@@ -54,7 +54,7 @@ const bcryptUtil = require("../utils/bcrypt.util");
  *                 type: number
  *             example:
  *               name: fake name
- *               email: fake@example.com
+ *               otpId: 12
  *               phoneNumber: '9574637464'
  *               designation: fake
  *               organization: fake ORG
@@ -284,6 +284,60 @@ exports.sendEmailVerificationOtp = async (req, res) => {
   const sendOtp = await AuthService.sendEmailVerificationOtp(req.body.email);
 
   return res.json({
+    data: sendOtp,
+    message: "otp sent",
+  });
+};
+/** POST Methods */
+/**
+ * @openapi
+ * '/api/um/verifyEmailOtp':
+ *  post:
+ *     tags:
+ *     - User
+ *     summary: Verify email otp
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - otpId
+ *               - email
+ *               - code
+ *             properties:
+ *               otpId:
+ *                 type: number
+ *               email:
+ *                 type: string
+ *               code:
+ *                 type: string
+ *             example:
+ *               otpId: 1
+ *               email: email@verified.com
+ *               code: 123456
+ *     responses:
+ *      200:
+ *        description: Fetched Successfully
+ *      400:
+ *        description: Bad Request
+ *      404:
+ *        description: Not Found
+ *      500:
+ *        description: Server Error
+ */
+exports.verifyEmailOtp = async (req, res) => {
+  const sendOtp = await AuthService.verifyEmailOtp(
+    req.body.otpId,
+    req.body.email,
+    req.body.code,
+  );
+
+  return res.json({
+    data: {},
     message: sendOtp,
   });
 };
