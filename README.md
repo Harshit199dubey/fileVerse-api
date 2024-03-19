@@ -1,4 +1,3 @@
-<p align="center"><img src="https://jwt.io/img/pic_logo.svg" width="100"></p> 
   
 ### <h1 align="center" id="heading">FileVerse API</h1>
 
