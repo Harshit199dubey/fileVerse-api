@@ -1,11 +1,14 @@
 <p align="center"><img src="https://jwt.io/img/pic_logo.svg" width="100"></p> 
   
-### <h1 align="center" id="heading">JWT Authentication Implementation in Node.js</h1>
+### <h1 align="center" id="heading">FileVerse API</h1>
 
-1. Copy `.env.example` to `.env`
-2. Update Database Credentials
-3. Create users table (node-jwt.sql)
-4. Update `JWT_SECRET` Key
-5. `npm start`
+1. Clone the repo using HTTPS URL.
+2. Switch to the project directory.
+3. Run `npm i`.
+4. Then, run `npm start` to start the Node.js application.
 
-Note:- You can use any random string as `JWT_SECRET`
+To get API details, you can open `http://localhost:3000/api/docs`, which will open up the Swagger documentation of the API.
+
+
+
+
