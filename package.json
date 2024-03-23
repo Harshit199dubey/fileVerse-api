@@ -8,6 +8,8 @@
     "lint": "npx lint-staged"
   },
   "dependencies": {
+    "@netlify/functions": "^2.6.0",
+    "@types/express": "^4.17.21",
     "bcrypt": "^5.0.1",
     "cookie-parser": "~1.4.4",
     "debug": "~2.6.9",
@@ -21,6 +23,7 @@
     "nodemailer": "^6.9.12",
     "nodemon": "^3.1.0",
     "sequelize": "^6.17.0",
+    "serverless-http": "^3.2.0",
     "speakeasy": "^2.0.0"
   },
   "devDependencies": {
