@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("./connection");
 
 const Gender = sequelize.define(
-  "Gender",
+  "gender",
   {
     id: {
       type: DataTypes.NUMBER,

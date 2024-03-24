@@ -2,7 +2,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("./connection");
 
 const Token = sequelize.define(
-  "Token",
+  "token",
   {
     userId: {
       type: DataTypes.STRING,
