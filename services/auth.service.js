@@ -19,12 +19,38 @@ const transporter = nodemailer.createTransport({
 
 exports.createUser = (user) => UserModel.create(user);
 
-exports.findUserByEmail = (email) =>
-  UserModel.findOne({
+exports.findUserByEmail = async (email) => {
+  const otpId = (
+    await Verificationtable.findOne({
+      where: {
+        email: email,
+      },
+    })
+  )?.id;
+  if (!otpId) {
+    return false;
+  }
+  return await UserModel.findOne({
     where: {
-      email,
+      otpId,
     },
   });
+};
+
+exports.findEmailByOtpId = async (otpId) => {
+  const email = (
+    await Verificationtable.findOne({
+      where: {
+        id: otpId,
+        isVerified: true,
+      },
+    })
+  )?.email;
+  if (!email) {
+    throw Error("Email not verified.");
+  }
+  return email;
+};
 
 exports.findUserById = (id) => UserModel.findByPk(id);
 
@@ -89,6 +115,32 @@ exports.refreshToken = async (refreshToken) => {
 
   return this.createToken({ id: data.userId });
 };
+
+exports.isUserExists = async (email) => {
+  console.log(email, "dd");
+  const emailData = await Verificationtable.findOne({
+    where: {
+      email: email,
+      isVerified: true,
+    },
+  });
+  if (emailData) {
+    console.log(emailData.id, "dd");
+    const email = await UserModel.findOne({
+      where: {
+        otpId: emailData.id,
+      },
+    });
+
+    if (!email) {
+      emailData.destroy();
+    }
+
+    return !!email;
+  }
+  return false;
+};
+
 exports.sendEmailVerificationOtp = async (email) => {
   // of 20 characters
   const secret = speakeasy.generateSecret({ length: 20 }).base32;

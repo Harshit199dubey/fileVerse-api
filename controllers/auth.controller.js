@@ -73,15 +73,17 @@ const bcryptUtil = require("../utils/bcrypt.util");
  *        description: Server Error
  */
 exports.register = async (req, res) => {
-  const isExist = await AuthService.findUserByEmail(req.body.email);
-  if (isExist) {
-    return res.status(400).json({
-      message: "Email already exists.",
-    });
-  }
+  await AuthService.findEmailByOtpId(req.body.otpId);
+  // const isExist= await AuthService.findUserByEmail(email);
+  // if (isExist) {
+  //   return res.status(400).json({
+  //     message: "Email already exists.",
+  //   });
+  // }
   const hashedPassword = await bcryptUtil.createHash(req.body.password);
   const userData = {
     ...req.body,
+    // email:email,
     password: hashedPassword,
   };
   const user = await AuthService.createUser(userData);
@@ -281,6 +283,13 @@ exports.refreshToken = async (req, res) => {
  *        description: Server Error
  */
 exports.sendEmailVerificationOtp = async (req, res) => {
+  const emailExists = await AuthService.isUserExists(req.body.email);
+  if (emailExists) {
+    res.status(400).json({
+      message: "Email already exists.",
+    });
+    return;
+  }
   const sendOtp = await AuthService.sendEmailVerificationOtp(req.body.email);
 
   return res.json({

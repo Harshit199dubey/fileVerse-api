@@ -7,8 +7,8 @@ const User = sequelize.define(
     name: {
       type: DataTypes.STRING,
     },
-    email: {
-      type: DataTypes.STRING,
+    otpId: {
+      type: DataTypes.INTEGER, // Adjust the data type according to your needs
     },
     password: {
       type: DataTypes.STRING,
